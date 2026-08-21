@@ -1,0 +1,71 @@
+根据 MimicKit 的文档，训练自己的数据集需要以下几个步骤：
+
+1. 准备运动数据
+运动数据需要转换为 MimicKit 格式。每个动作片段存储为 .pkl 文件，每帧包含：
+
+[root position (3D), root rotation (3D), joint rotations...]
+其中：
+
+3D 旋转使用 指数映射（exponential maps）
+1D 旋转使用 旋转角度
+关节顺序遵循 .xml 文件的深度优先遍历顺序
+数据转换工具
+如果你的数据来自其他格式，可以使用提供的转换脚本：
+
+源格式	转换脚本路径
+GMR	tools/gmr_to_mimickit/
+SMPL/AMASS	tools/smpl_to_mimickit/
+2. 放置数据文件
+将处理好的运动数据放入：
+
+data/motions/          # 单个动作片段
+data/datasets/         # 多动作数据集
+3. 配置环境文件
+修改环境配置文件（如 data/envs/deepmimic_humanoid_env.yaml）中的 motion_file 字段：
+
+单个动作：指定 .pkl 文件路径
+多个动作：指定 data/datasets/ 下的数据集文件
+4. 运行训练
+python mimickit/run.py --mode train \
+    --num_envs 4096 \
+    --engine_config data/engines/isaac_gym_engine.yaml \
+    --env_config data/envs/deepmimic_humanoid_env.yaml \
+    --agent_config data/agents/deepmimic_humanoid_ppo_agent.yaml \
+    --visualize false \
+    --out_dir output/
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/fushuying/.conda/envs/mimic/lib
+
+python mimickit/run.py --mode train \
+    --num_envs 4096 \
+    --engine_config data/engines/isaac_gym_engine.yaml \
+    --env_config data/envs/deepmimic_g1_env.yaml \
+    --agent_config data/agents/deepmimic_g1_ppo_agent.yaml \
+    --visualize false \
+    --out_dir output/
+
+python mimickit/run.py --mode train \
+    --num_envs 4096 \
+    --engine_config data/engines/isaac_gym_engine.yaml \
+    --env_config data/envs/amp_g1_env.yaml \
+    --agent_config data/agents/amp_g1_agent.yaml \
+    --visualize false \
+    --out_dir output2/
+或使用预设参数文件：
+
+python mimickit/run.py --arg_file args/deepmimic_g1_ppo_args.txt
+快速验证数据
+可视化检查动作数据：
+
+python mimickit/run.py --mode test \
+    --arg_file args/view_motion_g1_args.txt \
+    --visualize true
+
+python mimickit/run.py \
+  --mode test \
+  --arg_file args/deepmimic_g1_ppo_args.txt \
+  --model_file output/model.pt \
+  --visualize true
+
+关键要点：确保你的角色 .xml 文件与运动数据的关节顺序匹配，否则需要重新定向（retargeting）处理。
+
