@@ -1,0 +1,15 @@
+motions:
+  - file: "data/motions/g1/g1_cartwheel.pkl"
+    weight: 1.0
+  - file: "data/motions/g1/g1_double_kong.pkl"
+    weight: 1.0
+  - file: "data/motions/g1/g1_kick_combo.pkl"
+    weight: 1.0
+  - file: "data/motions/g1/g1_run.pkl"
+    weight: 1.0
+  - file: "data/motions/g1/g1_speed_vault.pkl"
+    weight: 1.0
+  - file: "data/motions/g1/g1_spinkick.pkl"
+    weight: 1.0
+  - file: "data/motions/g1/g1_walk.pkl"
+    weight: 5.0
